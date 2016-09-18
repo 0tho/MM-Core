@@ -46,7 +46,7 @@ public class MmCore
     	}
     	// Get json folder
     	File jsonFolder = new File(jsonConfigPath); 
-    	// Check if it exists
+    	// Check if folder exists
     	if ( !jsonFolder.exists()) {
     		jsonFolder.mkdir();
     	} else {
@@ -56,7 +56,18 @@ public class MmCore
     		// Resolve prototype delegations
     		jsonData = JsonHandler.resolvePrototypeDelegations(jsonData);
     		
+    		// Filter objects with no type
+    		// Objects with no type are meant just as a data holder and can't be registered
+    		for ( JsonObject obj : jsonData ) {
+    			if( !obj.has("type") ) {
+    				jsonData.remove(obj);
+    			}
+    		}
+    		
     		// Call stored registers
+    		for ( JsonObject obj : jsonData ) {
+    			
+    		}    		
     	}    	
     }
     

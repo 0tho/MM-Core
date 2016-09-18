@@ -1,8 +1,8 @@
-() Find assets in configs/metamods/assets
-() Allow other mods to register their own json readers and registers
-() Allow prototype chain in config files
-() Command to dump entities, block ids, item ids and biomes ids into log file
-    () Log file
-    () Block Dump
-    () Item Dump
-    () Biome Dump
+( ) Find assets in configs/metamods/assets
+( ) Allow other mods to register their own json readers and registers
+(x) Allow prototype chain in config files
+( ) Command to dump entities, block ids, item ids and biomes ids into log file
+    ( ) Log file
+    ( ) Block Dump
+    ( ) Item Dump
+    ( ) Biome Dump
