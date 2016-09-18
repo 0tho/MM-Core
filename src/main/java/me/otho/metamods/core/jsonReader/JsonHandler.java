@@ -139,7 +139,11 @@ public class JsonHandler {
 				// Build a prototype chain until finding a root element
 				while ( !foundRoot ) {					
 					System.out.println("Seeker: " + seeker.get("id").getAsString() + " " + (!seeker.has("prototype") ? "root" : "child") );
-					prototypeChain.push( seeker.get("id").getAsString() );
+					String id = seeker.get("id").getAsString();
+					if ( prototypeChain.contains( id ) ) {
+						throw new Error("Circular dependencies are not allowed. Found id: " + id + "more than once");
+					}
+					prototypeChain.push( id );
 					if( !seeker.has("prototype") ) {
 						foundRoot = true;
 					} else {
