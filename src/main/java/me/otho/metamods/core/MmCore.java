@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import me.otho.metamods.core.jsonReader.JsonHandler;
+import me.otho.metamods.core.registry.RegisterHandler;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -65,9 +66,7 @@ public class MmCore
     		}
     		
     		// Call stored registers
-    		for ( JsonObject obj : jsonData ) {
-    			
-    		}    		
+    		RegisterHandler.callRegisters(jsonData);	
     	}    	
     }
     
