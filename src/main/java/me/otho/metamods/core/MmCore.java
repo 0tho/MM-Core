@@ -2,13 +2,12 @@ package me.otho.metamods.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import me.otho.metamods.core.jsonReader.JsonHandler;
 import me.otho.metamods.core.registry.RegisterHandler;
-import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -59,11 +58,14 @@ public class MmCore
     		
     		// Filter objects with no type
     		// Objects with no type are meant just as a data holder and can't be registered
-    		for ( JsonObject obj : jsonData ) {
-    			if( !obj.has("type") ) {
-    				jsonData.remove(obj);
+    		
+			Iterator<JsonObject> i = jsonData.iterator();
+			while (i.hasNext()) {
+				JsonObject s = i.next(); // must be called before you can call i.remove()
+				if( !s.has("type") ) {
+    				i.remove();
     			}
-    		}
+			}
     		
     		// Call stored registers
     		RegisterHandler.callRegisters(jsonData);	

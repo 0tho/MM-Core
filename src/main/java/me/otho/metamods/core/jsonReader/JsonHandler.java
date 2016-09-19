@@ -9,16 +9,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.Stack;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
-import com.sun.javafx.collections.MappingChange.Map;
 
 /**
  * This class is responsible for reading json files from a path
@@ -42,7 +39,6 @@ public class JsonHandler {
 					return name.endsWith(".json");
 				}
 			};
-			Gson gson = new Gson();
 			JsonParser parser = new JsonParser();
 			
 			JsonReader fileReader;
@@ -120,7 +116,7 @@ public class JsonHandler {
 	    });
 		
 		// Check if there is some 'root' object
-		if ( jsonData.get(0).has("prototype") ) {
+		if ( !jsonData.isEmpty() && jsonData.get(0).has("prototype") ) {
 			throw new Error("At least some data must not have a prototype");
 		}
 		
