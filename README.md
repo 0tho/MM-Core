@@ -1,5 +1,5 @@
 # Metamod Core
-This is mod is a spiritual sucessor of [CustomItems](https://mods.curse.com/mc-mods/minecraft/224312-customitems)
+This mod is a spiritual sucessor of [CustomItems](https://mods.curse.com/mc-mods/minecraft/224312-customitems)
 
 MM-Core provides an api for other mods to read JSON config files and register their own customizations.
 
@@ -12,13 +12,13 @@ MM-Core also provides tools for knowing all block ids, biome ids, item ids, enti
 ### Json Files
 All .json files are read from .../config/metamod-core/configs/*.json
 
-Your json can be just a sinlge object or an array of objects.
+Your json can be just a single object or an array of objects.
 MM-Core handles by default 4 properties:
 
-* "id" - Every object MUST have and unique identifier
+* "id" - Every object MUST have a unique identifier
 * "type" - Types are used to know to who MM-Core should send this data. Ex: "metamod-items.item"
 * "prototype" - This refers to another data object "id". See more info below.
-* "onlyPrototype" - This defined if this data is just a model to be copied or a real info
+* "onlyPrototype" - This defines if this data is just a model to be copied or real info
 
 ### Default Resource Pack
 MM-Core reads .../config/metamod-core/resources/ as a default resourcePack ( it won't show in the list )
