@@ -1,8 +1,12 @@
-( ) Find assets in configs/metamods/assets
-(X) Allow other mods to register their own registers
+(x) Find a resourcepack in configs/metamods/resources
+(x) Allow other mods to register their own registers
 (x) Allow prototype chain in config files
-( ) Command to dump entities, block ids, item ids and biomes ids into log file
-    ( ) Log file
+(x) Register creativeTab meta type
+( ) Split api from code
+( ) Log file
+( ) Command to dump ... into log file    
     ( ) Block Dump
     ( ) Item Dump
     ( ) Biome Dump
+    ( ) MetaMod register types Dump
+    ( ) Creative Tabs

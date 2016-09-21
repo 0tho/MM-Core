@@ -8,6 +8,8 @@ import java.util.List;
 import com.google.gson.JsonObject;
 
 import me.otho.metamods.core.jsonReader.JsonHandler;
+import me.otho.metamods.core.meta.CreativeTabHandler;
+import me.otho.metamods.core.meta.RegisterCreativeTab;
 import me.otho.metamods.core.registry.RegisterHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.FolderResourcePack;
@@ -36,6 +38,14 @@ public class MmCore
     public void preinit (FMLPreInitializationEvent  event)
     {
     	modConfigFolder = event.getModConfigurationDirectory();
+    	
+    	CreativeTabHandler.initVanillaCreativeTabs();
+    	MmCore.handleCustomResourcePack();    	
+    	MmCore.addCoreMetaTypes();
+    	MmCore.handleJsonConfiguration();
+    }    
+    
+    private static void handleCustomResourcePack() {
     	defaultResourcePacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks", "field_110449_ao", "ap");
     	String modResourcePackPath = modConfigFolder.toString() + File.separator + MmCore.MOD_ID + File.separator + "resources" + File.separator;
     	File modResourceFile = new File(modResourcePackPath);
@@ -43,13 +53,14 @@ public class MmCore
     		modResourceFile.mkdirs();
     	}
     	defaultResourcePacks.add(new FolderResourcePack( modResourceFile ));
-    }    
-    
-    @EventHandler
-    public void init (FMLInitializationEvent event)
-    {	
-    	// Wait until init so other mods can interact with mm-core
-    	// Get path of config files
+	}
+
+	private static void addCoreMetaTypes() {
+    	RegisterHandler.addRegisterType(MOD_ID + ".creativeTab", new RegisterCreativeTab() );
+	}
+
+	private static void handleJsonConfiguration() {
+		// Get path of config files
     	String jsonConfigPath = modConfigFolder.toString() + File.separator + MmCore.MOD_ID + File.separator + "configs" + File.separator;
     	
     	// Get json folder
@@ -70,14 +81,20 @@ public class MmCore
 			Iterator<JsonObject> i = jsonData.iterator();
 			while (i.hasNext()) {
 				JsonObject s = i.next(); // must be called before you can call i.remove()
-				if( !s.has("type") ) {
+				if( !s.has("type") || (s.has("modelOnly") && s.get("modelOnly").getAsBoolean())) {
     				i.remove();
     			}
 			}
     		
     		// Call stored registers
     		RegisterHandler.callRegisters(jsonData);	
-    	}    	
+    	}
+	}
+
+	@EventHandler
+    public void init (FMLInitializationEvent event)
+    {	
+    	
     }
     
     @EventHandler

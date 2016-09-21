@@ -157,8 +157,8 @@ public class JsonHandler {
 					// Put all parent properties in new object, overwriting repeated properties
 					for ( Entry<String,JsonElement> keySet : node.entrySet() ) {
 						String key = keySet.getKey();
-						// Ignore id and prototype
-						if ( !key.equals("id") && !key.equals("prototype") ) {
+						// Ignore id, prototype and modelOnly
+						if ( !key.equals("id") && !key.equals("prototype") && !key.equals("modelOnly") ) {
 							if ( fullObject.has(key) ) {
 								fullObject.remove(key);
 							}
@@ -168,6 +168,9 @@ public class JsonHandler {
 				}
 				
 				fullObject.add("id", obj.get("id"));
+				if ( obj.has("modelOnly") ) {
+					fullObject.add("modelOnly", obj.get("modelOnly"));
+				}
 				
 				objectMap.put(obj.get("id").getAsString(), fullObject);
 			}
