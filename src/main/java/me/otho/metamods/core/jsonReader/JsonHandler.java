@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Stack;
 
@@ -16,6 +17,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+
+import me.otho.metamods.core.registry.RegisterHandler;
 
 /**
  * This class is responsible for reading json files from a path
@@ -177,5 +180,34 @@ public class JsonHandler {
 		}		
 		
 		return  new ArrayList<JsonObject>(objectMap.values());
+	}
+
+	public static void handleJsonConfigurationFolder(String folderPath) {
+    	// Get json folder
+    	File jsonFolder = new File(folderPath); 
+    	// Check if folder exists
+    	if ( !jsonFolder.exists()) {
+    		jsonFolder.mkdirs();
+    	} else {
+    		// Read Json files from path
+    		ArrayList<JsonObject> jsonData = read( jsonFolder );
+    		
+    		// Resolve prototype delegations
+    		jsonData = resolvePrototypeDelegations(jsonData);
+    		
+    		// Filter objects with no type
+    		// Objects with no type are meant just as a data holder and can't be registered
+    		
+			Iterator<JsonObject> i = jsonData.iterator();
+			while (i.hasNext()) {
+				JsonObject s = i.next(); // must be called before you can call i.remove()
+				if( !s.has("type") || (s.has("modelOnly") && s.get("modelOnly").getAsBoolean())) {
+    				i.remove();
+    			}
+			}
+    		
+    		// Call stored registers
+    		RegisterHandler.callRegisters(jsonData);	
+    	}
 	}
 }
