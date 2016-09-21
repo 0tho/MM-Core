@@ -29,6 +29,11 @@ import me.otho.metamods.core.registry.RegisterHandler;
  */
 public class JsonHandler {
 	
+	private static final String KEY_ID = "id";
+	private static final String KEY_META_TYPE = "metaType";
+	private static final String KEY_PROTOTYPE = "prototype";
+	private static final String KEY_PROTOTYPE_ONLY = "onlyPrototype";
+	
 	public static ArrayList<JsonObject> read (File jsonFolder) {
 		// Stores read data
 		ArrayList<JsonObject> jsonData = new ArrayList<JsonObject>();
@@ -100,7 +105,7 @@ public class JsonHandler {
 		HashMap<String, JsonObject> objectMap = new HashMap<String, JsonObject>();
 		// Throw error if object has no id
 		for ( JsonObject element: jsonData ) {
-			if ( element.get("id").getAsString().isEmpty() ) {
+			if ( element.get(KEY_ID).getAsString().isEmpty() ) {
 				throw new Error("Found json object without id");
 			}
 		}
@@ -110,8 +115,8 @@ public class JsonHandler {
 	        @Override
 	        public int compare(JsonObject obj2, JsonObject obj1)
 	        {
-	        	Boolean isRoot1 = !obj1.has("prototype");
-	        	Boolean isRoot2 = !obj2.has("prototype");
+	        	Boolean isRoot1 = !obj1.has(KEY_PROTOTYPE);
+	        	Boolean isRoot2 = !obj2.has(KEY_PROTOTYPE);
 	        	
 
 	            return isRoot1.compareTo(isRoot2);
@@ -119,16 +124,16 @@ public class JsonHandler {
 	    });
 		
 		// Check if there is some 'root' object
-		if ( !jsonData.isEmpty() && jsonData.get(0).has("prototype") ) {
+		if ( !jsonData.isEmpty() && jsonData.get(0).has(KEY_PROTOTYPE) ) {
 			throw new Error("At least some data must not have a prototype");
 		}
 		
 		for( JsonObject obj : jsonData ) {
-			objectMap.put( obj.get("id").getAsString(), obj );
+			objectMap.put( obj.get(KEY_ID).getAsString(), obj );
 		}
 		
 		for( JsonObject obj : jsonData ) {
-			if( obj.has("prototype") ) {
+			if( obj.has(KEY_PROTOTYPE) ) {
 				// An arraylist to store the prototype chain
 				Stack<String> prototypeChain = new Stack<String>();
 				
@@ -137,16 +142,16 @@ public class JsonHandler {
 				
 				// Build a prototype chain until finding a root element
 				while ( !foundRoot ) {					
-					System.out.println("Seeker: " + seeker.get("id").getAsString() + " " + (!seeker.has("prototype") ? "root" : "child") );
-					String id = seeker.get("id").getAsString();
+					System.out.println("Seeker: " + seeker.get(KEY_ID).getAsString() + " " + (!seeker.has(KEY_PROTOTYPE) ? "root" : "child") );
+					String id = seeker.get(KEY_ID).getAsString();
 					if ( prototypeChain.contains( id ) ) {
 						throw new Error("Circular dependencies are not allowed. Found id: " + id + "more than once");
 					}
 					prototypeChain.push( id );
-					if( !seeker.has("prototype") ) {
+					if( !seeker.has(KEY_PROTOTYPE) ) {
 						foundRoot = true;
 					} else {
-						seeker = objectMap.get( seeker.get("prototype").getAsString() );						
+						seeker = objectMap.get( seeker.get(KEY_PROTOTYPE).getAsString() );						
 					}
 				}
 				
@@ -161,7 +166,7 @@ public class JsonHandler {
 					for ( Entry<String,JsonElement> keySet : node.entrySet() ) {
 						String key = keySet.getKey();
 						// Ignore id, prototype and modelOnly
-						if ( !key.equals("id") && !key.equals("prototype") && !key.equals("modelOnly") ) {
+						if ( !key.equals(KEY_ID) && !key.equals(KEY_PROTOTYPE) && !key.equals(KEY_PROTOTYPE_ONLY) ) {
 							if ( fullObject.has(key) ) {
 								fullObject.remove(key);
 							}
@@ -170,12 +175,12 @@ public class JsonHandler {
 					}
 				}
 				
-				fullObject.add("id", obj.get("id"));
-				if ( obj.has("modelOnly") ) {
-					fullObject.add("modelOnly", obj.get("modelOnly"));
+				fullObject.add(KEY_ID, obj.get(KEY_ID));
+				if ( obj.has(KEY_PROTOTYPE_ONLY) ) {
+					fullObject.add(KEY_PROTOTYPE_ONLY, obj.get(KEY_PROTOTYPE_ONLY));
 				}
 				
-				objectMap.put(obj.get("id").getAsString(), fullObject);
+				objectMap.put(obj.get(KEY_ID).getAsString(), fullObject);
 			}
 		}		
 		
@@ -201,7 +206,7 @@ public class JsonHandler {
 			Iterator<JsonObject> i = jsonData.iterator();
 			while (i.hasNext()) {
 				JsonObject s = i.next(); // must be called before you can call i.remove()
-				if( !s.has("type") || (s.has("modelOnly") && s.get("modelOnly").getAsBoolean())) {
+				if( !s.has(KEY_META_TYPE) || (s.has(KEY_PROTOTYPE_ONLY) && s.get(KEY_PROTOTYPE_ONLY).getAsBoolean())) {
     				i.remove();
     			}
 			}
