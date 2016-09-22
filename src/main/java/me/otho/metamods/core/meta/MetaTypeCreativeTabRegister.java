@@ -2,10 +2,10 @@ package me.otho.metamods.core.meta;
 
 import com.google.gson.JsonObject;
 
+import me.otho.metamods.core.api.IMetaTypeRegister;
 import me.otho.metamods.core.mod.MmCreativeTab;
-import me.otho.metamods.core.registry.IRegister;
 
-public class RegisterCreativeTab implements IRegister {
+public class MetaTypeCreativeTabRegister implements IMetaTypeRegister {
 
 	@Override
 	public void register(JsonObject obj) {

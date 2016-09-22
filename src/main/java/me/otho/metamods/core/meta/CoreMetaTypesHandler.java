@@ -6,7 +6,7 @@ import me.otho.metamods.core.registry.RegisterHandler;
 public class CoreMetaTypesHandler {
 	
 	public static void registerCoreMetaTypes() {
-		RegisterHandler.addRegisterType(MmCore.MOD_ID+ ".creativeTab", new RegisterCreativeTab() );
+		RegisterHandler.addMetaTypeRegister(MmCore.MOD_ID+ ".creativeTab", new MetaTypeCreativeTabRegister() );
 	}
 
 }

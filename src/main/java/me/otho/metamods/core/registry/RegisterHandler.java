@@ -7,11 +7,13 @@ import java.util.HashMap;
 
 import com.google.gson.JsonObject;
 
+import me.otho.metamods.core.api.IMetaTypeRegister;
+
 public class RegisterHandler {
 
-	private static HashMap<String, IRegister> registerRegistry = new HashMap<String, IRegister>();
+	private static HashMap<String, IMetaTypeRegister> registerRegistry = new HashMap<String, IMetaTypeRegister>();
 	
-	public static void addRegisterType ( String type, IRegister register ) {
+	public static void addMetaTypeRegister ( String type, IMetaTypeRegister register ) {
 		if ( registerRegistry.containsKey( type ) ) {
 			throw new Error ("Tried to register registerType: " + type + " more than once" );
 		}
@@ -39,14 +41,14 @@ public class RegisterHandler {
 				throw new Error("Object with id: " + id + " tried to register with type: " + type + ", but type was not found." );
 			}
 			
-			IRegister register = registerRegistry.get( type );
+			IMetaTypeRegister register = registerRegistry.get( type );
 			
 			System.out.println("Register object: " + obj.get("id").getAsString() + " as type:" + type );
 			register.register(obj);
 		}
 	}
 	
-	public static IRegister get( String id ) {
+	public static IMetaTypeRegister get( String id ) {
 		return registerRegistry.get(id);
 	}
 }

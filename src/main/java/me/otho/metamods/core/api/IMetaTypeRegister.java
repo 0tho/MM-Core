@@ -1,8 +1,8 @@
-package me.otho.metamods.core.registry;
+package me.otho.metamods.core.api;
 
 import com.google.gson.JsonObject;
 
-public interface IRegister {
+public interface IMetaTypeRegister {
 
 	public void register (JsonObject obj);
 	
