@@ -5,6 +5,7 @@ import java.io.File;
 import me.otho.metamods.core.jsonReader.JsonHandler;
 import me.otho.metamods.core.meta.CoreMetaTypesHandler;
 import me.otho.metamods.core.meta.CreativeTabHandler;
+import me.otho.metamods.core.meta.DataDumpingHandler;
 import me.otho.metamods.core.resourcePack.ResourcePackHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -27,6 +28,7 @@ public class MmCore
     private static String modConfigPath;
     private static String metamodResourcePackPath;
     private static String metamodConfigsPath;
+    private static String metamodDumpFilePath;
     
     @EventHandler
     public void preinit (FMLPreInitializationEvent  event)
@@ -35,11 +37,13 @@ public class MmCore
     	modConfigPath = forgeModsConfigFolder.toString() + File.separator + MmCore.MOD_ID + File.separator;
     	metamodResourcePackPath = modConfigPath + "resources" + File.separator;
     	metamodConfigsPath = modConfigPath + "configs" + File.separator;
+    	metamodDumpFilePath = modConfigPath + "DataDump.txt";
     	
     	CreativeTabHandler.initVanillaCreativeTabs();
     	ResourcePackHandler.init(metamodResourcePackPath);   	
     	CoreMetaTypesHandler.registerCoreMetaTypes();
     	JsonHandler.handleJsonConfigurationFolder(metamodConfigsPath);
+    	DataDumpingHandler.dumpDataFile(metamodDumpFilePath);
     }
     
     @EventHandler

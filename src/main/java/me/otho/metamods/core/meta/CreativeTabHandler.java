@@ -1,6 +1,7 @@
 package me.otho.metamods.core.meta;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import net.minecraft.creativetab.CreativeTabs;
 
@@ -24,5 +25,9 @@ public class CreativeTabHandler {
 	
 	public static CreativeTabs getTab( String id ) {
 		return creativeTabs.get(id);
+	}
+	
+	public static Set<String> getCreativeTabs () {
+		return creativeTabs.keySet();
 	}
 }

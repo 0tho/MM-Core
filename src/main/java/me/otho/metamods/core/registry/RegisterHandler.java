@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.google.gson.JsonObject;
 
@@ -50,5 +51,9 @@ public class RegisterHandler {
 	
 	public static IMetaTypeRegister get( String id ) {
 		return registerRegistry.get(id);
+	}
+	
+	public static Set<String> getKeys() {
+		return registerRegistry.keySet();
 	}
 }
