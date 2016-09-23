@@ -19,6 +19,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
 import me.otho.metamods.core.registry.RegisterHandler;
+import static me.otho.metamods.core.jsonReader.KeyConstants.*;
 
 /**
  * This class is responsible for reading json files from a path
@@ -28,11 +29,6 @@ import me.otho.metamods.core.registry.RegisterHandler;
  *
  */
 public class JsonHandler {
-	
-	private static final String KEY_ID = "id";
-	private static final String KEY_META_TYPE = "metaType";
-	private static final String KEY_PROTOTYPE = "prototype";
-	private static final String KEY_PROTOTYPE_ONLY = "onlyPrototype";
 	
 	public static ArrayList<JsonObject> read (File jsonFolder) {
 		// Stores read data
