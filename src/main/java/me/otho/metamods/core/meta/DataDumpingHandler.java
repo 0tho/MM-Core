@@ -9,6 +9,7 @@ import me.otho.metamods.core.registry.RegisterHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.Item;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -24,6 +25,7 @@ public class DataDumpingHandler {
 			dumpBlockIds(dumpingFile);
 			dumpItemIds(dumpingFile);
 			dumpBiomeIds(dumpingFile);
+			dumpPotionIds(dumpingFile);
 			dumpCreativeTabIds(dumpingFile);
 			dumpEntitiesIds(dumpingFile);
 			dumpMetaTypesIds(dumpingFile);
@@ -34,6 +36,24 @@ public class DataDumpingHandler {
 		}
 	}
 	
+	private static void dumpPotionIds(PrintWriter dumpingFile) {
+		//Dump potion ids
+		dumpingFile.write( "\nPotion ids \n");
+		dumpingFile.write( SEPARATOR );
+		
+		Iterator<Potion> potionIter = ForgeRegistries.POTIONS.iterator();
+		
+		while (potionIter.hasNext() ) {
+			Potion potion = potionIter.next();
+			
+			String name = potion.getRegistryName().toString();
+			
+			dumpingFile.write( name + "\n");						
+		}	
+		
+	}
+	
+
 	private static void dumpBlockIds(PrintWriter dumpingFile) {
 		//Dump block ids
 		dumpingFile.write( "\nBlocks ids \n");
