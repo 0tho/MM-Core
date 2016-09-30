@@ -3,7 +3,6 @@ package me.otho.metamods.core.jsonReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -204,7 +203,7 @@ public class JsonHandler {
     	} else {
     		// Read Json files from path
     		ArrayList<File> jsonFiles = getFilesAndSubFolderFiles( jsonFolder, 1 );
-    		ArrayList<JsonObject> jsonData = readJsonObjectsFromFiles((File[]) jsonFiles.toArray());
+    		ArrayList<JsonObject> jsonData = readJsonObjectsFromFiles( jsonFiles.toArray(new File[0]));
     		
     		// Resolve prototype delegations
     		jsonData = resolvePrototypeDelegations(jsonData);
