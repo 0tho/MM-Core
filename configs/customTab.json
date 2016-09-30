@@ -1,0 +1,5 @@
+{
+  "id": "customTab",
+  "iconItem": "minecraft:dirt",
+  "metaType": "metamod-core.creativeTab"
+}
