@@ -30,69 +30,81 @@ import static me.otho.metamods.core.jsonReader.KeyConstants.*;
  */
 public class JsonHandler {
 	
-	public static ArrayList<JsonObject> read (File jsonFolder) {
-		// Stores read data
-		ArrayList<JsonObject> jsonData = new ArrayList<JsonObject>();
+	public static ArrayList<File> getFilesAndSubFolderFiles(File rootFolder, int subFolders ) {
+		// Stores read files
+		ArrayList<File> jsonFiles = new ArrayList<File>();
 		
-		if ( jsonFolder.exists() ) {
-			// Create a json file filter
-			FilenameFilter jsonFilter = new FilenameFilter() {
-				
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".json");
+		// if folder really exists
+		if ( rootFolder.exists() ) {
+			// Get all files from this folder
+			File[] files = rootFolder.listFiles();
+			
+			// for each file
+			for(File file : files) {
+				// if file add to jsonFiles
+				if( file.isFile() ) {
+					jsonFiles.add(file);
+				} 
+				// if folder and subFolders > 0 getJsonFiles from subFolder
+				else if ( subFolders > 0 ) {
+					jsonFiles.addAll( getFilesAndSubFolderFiles(file, subFolders - 1) );
 				}
-			};
-			JsonParser parser = new JsonParser();
+				
+			}
 			
-			JsonReader fileReader;
-			
-			// Get a list of all json files
-			File[] files = jsonFolder.listFiles(jsonFilter);
-			
-			// Read json data from json files
-			// Check if array is not empty
-			if ( files.length > 0 ) {
-				// For each json file
-				for( File file : files ) {
-					// Check if it is a file (could be a folder)
-					if ( file.isFile() ) {
-						try {
-							// Read json data from file
-							fileReader = new JsonReader( new FileReader( file ) );
-							// Parse data as object
-							Object data = parser.parse(fileReader);
-							
-							// Check if it is an object or array
-							if ( data instanceof JsonObject ) {
-								JsonObject obj = (JsonObject) data;
-								
-								// Add it to read data
-								jsonData.add(obj);
-							} else if ( data instanceof JsonArray ) {
-								JsonArray arr = (JsonArray) data;
-								
-								// For each element in this array
-								for( JsonElement obj : arr ) {
-									// Check if it is an object
-									if ( obj.isJsonObject() ) {
-										// Add it to read data
-										jsonData.add((JsonObject) obj);
-									}
-								}
-							} else {
-								// If read data is not array or object reject it
-								throw new Error ("Invalid Json");
-							}							
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						}
+		}
+		
+		return jsonFiles;
+	}
+
+	public static ArrayList<JsonObject> readJsonObjectsFromFiles(File[] jsonFiles) {
+		// Stores read data
+		ArrayList<JsonObject> jsonData = new ArrayList<JsonObject>();		
+
+		JsonParser parser = new JsonParser();		
+		JsonReader fileReader;
+		
+		// Read json data from json files
+		// Check if array is not empty
+		if ( jsonFiles.length > 0 ) {
+			// For each json file
+			for( File file : jsonFiles ) {
+				// Check if it is a file (could be a folder)
+				if ( file.isFile() ) {
+					try {
+						// Read json data from file
+						fileReader = new JsonReader( new FileReader( file ) );
+						// Parse data as object
+						Object data = parser.parse(fileReader);
 						
+						// Check if it is an object or array
+						if ( data instanceof JsonObject ) {
+							JsonObject obj = (JsonObject) data;
+							
+							// Add it to read data
+							jsonData.add(obj);
+						} else if ( data instanceof JsonArray ) {
+							JsonArray arr = (JsonArray) data;
+							
+							// For each element in this array
+							for( JsonElement obj : arr ) {
+								// Check if it is an object
+								if ( obj.isJsonObject() ) {
+									// Add it to read data
+									jsonData.add((JsonObject) obj);
+								}
+							}
+						} else {
+							// If read data is not array or object reject it
+							throw new Error ("Invalid Json");
+						}							
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					}
+					
 				}
 			}
 		}
-		
 		
 		return jsonData;
 	}
@@ -191,7 +203,8 @@ public class JsonHandler {
     		jsonFolder.mkdirs();
     	} else {
     		// Read Json files from path
-    		ArrayList<JsonObject> jsonData = read( jsonFolder );
+    		ArrayList<File> jsonFiles = getFilesAndSubFolderFiles( jsonFolder, 1 );
+    		ArrayList<JsonObject> jsonData = readJsonObjectsFromFiles((File[]) jsonFiles.toArray());
     		
     		// Resolve prototype delegations
     		jsonData = resolvePrototypeDelegations(jsonData);
