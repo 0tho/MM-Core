@@ -2,9 +2,9 @@ package me.otho.metamods.core.api;
 
 public interface IMetaTypeRegister {
 
-	public void register (Object data);
-	
-	public int getPriority();
+  public void register(Object data);
 
-	public Class<?> getReaderClass();
+  public int getPriority();
+
+  public Class<?> getReaderClass();
 }
