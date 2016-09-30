@@ -15,10 +15,10 @@ All .json files are read from .../config/metamod-core/configs/*.json
 Your json can be just a single object or an array of objects.
 MM-Core handles by default 4 properties:
 
-* "id" - Every object MUST have a unique identifier
-* "type" - Types are used to know to who MM-Core should send this data. Ex: "metamod-items.item"
-* "prototype" - This refers to another data object "id". See more info below.
-* "onlyPrototype" - This defines if this data is just a model to be copied or real info
+* "id" - Every object MUST have a unique identifier.
+* "metaType" - Meta types are used to know to who MM-Core should send this data. Ex: "metamod-items.item".
+* "inherit" - This object inherits all properties from another object referenced by it "id". See more about it below.
+* "isTemplate" - This defines if this data object is just a template to be copied.
 
 ### Default Resource Pack
 MM-Core reads .../config/metamod-core/resources/ as a default resourcePack ( it won't show in the list )
@@ -35,22 +35,22 @@ If you have an config file like this:
 [
   {
     "id": "shinyIngot",
-    "onlyPrototype": true,
-    "type": "metamod-items.item",
+    "isTemplate": true,
+    "metaType": "metamod-items.item",
     "maxStackSize": 16,
     "glows": true
   },
   {
     "id": "platinumIngot",
-    "prototype": "shinyIngot"
+    "inherit": "shinyIngot"
   },
   {
     "id": "mithrilIngot",
-    "prototype": "shinyIngot"
+    "inherit": "shinyIngot"
   },
   {
     "id": "uraniumIngot",
-    "prototype": "shinyIngot",
+    "inherit": "shinyIngot",
     "maxStackSize": 8
   }
 ]
@@ -62,19 +62,19 @@ MM-Core will read it and transform it in:
 [
   {
     "id": "platinumIngot",
-    "type": "metamod-items.item",
+    "metaType": "metamod-items.item",
     "maxStackSize": 16,
     "glows": true
   },
   {
     "id": "mithrilIngot",
-    "type": "metamod-items.item",
+    "metaType": "metamod-items.item",
     "maxStackSize": 16,
     "glows": true
   },
   {
     "id": "uraniumIngot",
-    "type": "metamod-items.item",
+    "metaType": "metamod-items.item",
     "maxStackSize": 8,
     "glows": true
   }
