@@ -4,10 +4,11 @@ import me.otho.metamods.core.jsonreader.JsonHandler;
 import me.otho.metamods.core.meta.CoreMetaTypesHandler;
 import me.otho.metamods.core.meta.CreativeTabHandler;
 import me.otho.metamods.core.meta.DataDumpingHandler;
-import me.otho.metamods.core.resourcepack.ResourcePackHandler;
+import me.otho.metamods.core.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -28,6 +29,10 @@ public class MmCore {
   private static String metamodResourcePackPath;
   private static String metamodConfigsPath;
   private static String metamodDumpFilePath;
+  
+  @SidedProxy(serverSide = "me.otho.metamods.core.proxy.CommonProxy", 
+      clientSide = "me.otho.metamods.core.proxy.ClientProxy")
+  public static CommonProxy proxy;
 
   @EventHandler
   public void preinit(FMLPreInitializationEvent event) {
@@ -39,7 +44,7 @@ public class MmCore {
     metamodDumpFilePath = modConfigPath + "DataDump.txt";
 
     CreativeTabHandler.initVanillaCreativeTabs();
-    ResourcePackHandler.init(metamodResourcePackPath);
+    proxy.handleResourcePackFolder(metamodResourcePackPath);
     CoreMetaTypesHandler.registerCoreMetaTypes();
     JsonHandler.handleJsonConfigurationFolder(metamodConfigsPath);
     DataDumpingHandler.dumpDataFile(metamodDumpFilePath);

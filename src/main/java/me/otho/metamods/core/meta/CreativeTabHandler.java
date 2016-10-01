@@ -1,6 +1,9 @@
 package me.otho.metamods.core.meta;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -14,7 +17,8 @@ public class CreativeTabHandler {
    */
   public static void initVanillaCreativeTabs() {
     for (CreativeTabs tab : CreativeTabs.CREATIVE_TAB_ARRAY) {
-      creativeTabs.put(tab.getTabLabel(), tab);
+      String label = ReflectionHelper.getPrivateValue(CreativeTabs.class, tab, "tabLabel");
+      creativeTabs.put(label, tab);
     }
   }
 
